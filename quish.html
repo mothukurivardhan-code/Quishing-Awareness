@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quishing Awareness - Protect Yourself from QR Code Phishing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .alert-box {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .alert-icon {
+            font-size: 2em;
+            flex-shrink: 0;
+        }
+
+        .alert-content h2 {
+            color: #856404;
+            margin-bottom: 5px;
+        }
+
+        .alert-content p {
+            color: #856404;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .card p {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .card ul {
+            list-style-position: inside;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .card li {
+            margin-bottom: 8px;
+        }
+
+        .warning-card {
+            background: #f8d7da;
+            border-left: 5px solid #d9534f;
+        }
+
+        .warning-card h3 {
+            color: #d9534f;
+        }
+
+        .success-card {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+        }
+
+        .success-card h3 {
+            color: #28a745;
+        }
+
+        .tips-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .tips-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8em;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .tip {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+        }
+
+        .tip-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tip h4 {
+            color: #333;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .tip p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .comparison-table .safe {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .comparison-table .danger {
+            color: #d9534f;
+            font-weight: 600;
+        }
+
+        footer {
+            background: rgba(0,0,0,0.1);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #764ba2;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .alert-box {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🎣 Quishing Awareness</h1>
+            <p>Learn how to protect yourself from QR code phishing attacks</p>
+        </header>
+
+        <!-- Alert Box -->
+        <div class="alert-box">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-content">
+                <h2>What is Quishing?</h2>
+                <p><strong>Quishing</strong> is a phishing attack that uses malicious QR codes to trick users into visiting fake websites, downloading malware, or revealing sensitive information. It's "QR code phishing" combined into one word.</p>
+            </div>
+        </div>
+
+        <!-- Main Content Cards -->
+        <div class="grid">
+            <!-- Card 1: What is Quishing -->
+            <div class="card">
+                <div class="card-icon">📱</div>
+                <h3>Understanding Quishing</h3>
+                <p>Quishing attacks exploit the trust users have in QR codes. Attackers place fake QR codes in public spaces or digitally to deceive victims.</p>
+                <ul>
+                    <li>Placed over legitimate codes</li>
+                    <li>Posted on fake advertisements</li>
+                    <li>Sent via email or SMS</li>
+                    <li>Shared on social media</li>
+                </ul>
+            </div>
+
+            <!-- Card 2: Common Attack Methods -->
+            <div class="card warning-card">
+                <div class="card-icon">🚨</div>
+                <h3>Attack Methods</h3>
+                <p>Attackers use creative tactics to deploy quishing attacks:</p>
+                <ul>
+                    <li>Overlay legitimate codes with malicious ones</li>
+                    <li>Place codes at parking meters & toll booths</li>
+                    <li>Use restaurant menus with fake codes</li>
+                    <li>Deploy codes in invoices and bills</li>
+                    <li>Add codes to event posters</li>
+                </ul>
+            </div>
+
+            <!-- Card 3: Risks of Quishing -->
+            <div class="card warning-card">
+                <div class="card-icon">⚡</div>
+                <h3>Potential Risks</h3>
+                <p>Scanning malicious QR codes can lead to:</p>
+                <ul>
+                    <li>Credential theft and identity theft</li>
+                    <li>Malware installation</li>
+                    <li>Financial fraud</li>
+                    <li>Data breach exposure</li>
+                    <li>Unauthorized access to accounts</li>
+                </ul>
+            </div>
+
+            <!-- Card 4: How to Stay Safe -->
+            <div class="card success-card">
+                <div class="card-icon">✅</div>
+                <h3>Stay Safe</h3>
+                <p>Follow these essential practices to protect yourself:</p>
+                <ul>
+                    <li>Verify QR code source and location</li>
+                    <li>Check URL preview before opening</li>
+                    <li>Use a QR code scanner with security features</li>
+                    <li>Never enter passwords from QR redirects</li>
+                    <li>Report suspicious codes</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="tips-section">
+            <h2>🛡️ Essential Safety Tips</h2>
+            <div class="tips-grid">
+                <div class="tip">
+                    <div class="tip-number">1</div>
+                    <h4>Inspect the Source</h4>
+                    <p>Check if the QR code looks legitimate. Is it properly placed? Does it appear to be printed or sticker-covered? Hackers often paste codes over legitimate ones.</p>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-number">2</div>
+                    <h4>Preview Before You Click</h4>
+                    <p>Most modern phones show a URL preview. Read it carefully before scanning. Does it look like an official website?</p>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-number">3</div>
+                    <h4>Never Login via QR</h4>
+                    <p>Don't enter passwords on sites accessed through random QR codes. If you must login, do it directly on the official website.</p>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-number">4</div>
+                    <h4>Verify the Domain</h4>
+                    <p>Check if the domain is legitimate. Look for HTTPS, proper spelling, and official branding. Beware of similar-looking domains.</p>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-number">5</div>
+                    <h4>Use Security Tools</h4>
+                    <p>Enable browser security features, use antivirus software, and keep your phone's OS updated to the latest version.</p>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-number">6</div>
+                    <h4>Trust Your Instincts</h4>
+                    <p>If something feels off about a QR code or where it's placed, don't scan it. Better safe than sorry!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="tips-section">
+            <h2>📊 Safe vs. Suspicious QR Codes</h2>
+            <table class="comparison-table">
+                <tr>
+                    <th>Characteristic</th>
+                    <th style="color: #28a745;">✅ Likely Safe</th>
+                    <th style="color: #d9534f;">❌ Likely Suspicious</th>
+                </tr>
+                <tr>
+                    <td><strong>Source Location</strong></td>
+                    <td class="safe">Official business website or store</td>
+                    <td class="danger">Random public place or overlay</td>
+                </tr>
+                <tr>
+                    <td><strong>QR Code Condition</strong></td>
+                    <td class="safe">Clean, well-printed, professionally made</td>
+                    <td class="danger">Worn, torn, or sticker-covered</td>
+                </tr>
+                <tr>
+                    <td><strong>URL Preview</strong></td>
+                    <td class="safe">Official domain (e.g., amazon.com)</td>
+                    <td class="danger">Misspelled or unfamiliar domain</td>
+                </tr>
+                <tr>
+                    <td><strong>Connection Type</strong></td>
+                    <td class="safe">HTTPS with valid certificate</td>
+                    <td class="danger">HTTP or certificate warning</td>
+                </tr>
+                <tr>
+                    <td><strong>Request Type</strong></td>
+                    <td class="safe">Links to download apps or view info</td>
+                    <td class="danger">Asks to login or enter sensitive data</td>
+                </tr>
+                <tr>
+                    <td><strong>Context</strong></td>
+                    <td class="safe">Expected use case (menu at restaurant)</td>
+                    <td class="danger">Unexpected or suspicious context</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Red Flags Section -->
+        <div class="tips-section">
+            <h2>🚩 Red Flags to Watch For</h2>
+            <div class="tips-grid">
+                <div class="tip" style="border-left: 5px solid #d9534f;">
+                    <h4>Urgent Action Required</h4>
+                    <p>Messages claiming immediate action is needed to avoid penalties</p>
+                </div>
+
+                <div class="tip" style="border-left: 5px solid #d9534f;">
+                    <h4>Generic Greetings</h4>
+                    <p>"Dear User" instead of your actual name</p>
+                </div>
+
+                <div class="tip" style="border-left: 5px solid #d9534f;">
+                    <h4>Poor Grammar/Spelling</h4>
+                    <p>Professional companies proofread their materials</p>
+                </div>
+
+                <div class="tip" style="border-left: 5px solid #d9534f;">
+                    <h4>Unusual Requests</h4>
+                    <p>Banks never ask for passwords via QR codes</p>
+                </div>
+
+                <div class="tip" style="border-left: 5px solid #d9534f;">
+                    <h4>Suspicious URLs</h4>
+                    <p>Check for URL typos or unusual TLDs</p>
+                </div>
+
+                <div class="tip" style="border-left: 5px solid #d9534f;">
+                    <h4>Unsolicited Messages</h4>
+                    <p>QR codes from unknown senders</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- What to Do If Compromised -->
+        <div class="tips-section">
+            <h2>🔐 If You've Been Compromised</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; line-height: 1.8;">
+                <ol style="color: #333; padding-left: 20px;">
+                    <li><strong>Disconnect from the internet</strong> - Prevent further data leakage</li>
+                    <li><strong>Change your passwords</strong> - Use strong, unique passwords for all accounts</li>
+                    <li><strong>Enable two-factor authentication (2FA)</strong> - Add an extra security layer</li>
+                    <li><strong>Monitor your accounts</strong> - Check for unauthorized transactions</li>
+                    <li><strong>Run malware scan</strong> - Use antivirus software to check your device</li>
+                    <li><strong>Contact your bank/organizations</strong> - Alert them immediately if financial data was compromised</li>
+                    <li><strong>Report to authorities</strong> - File a report with local law enforcement or cybercrime units</li>
+                    <li><strong>Consider identity theft protection</strong> - Monitor your credit reports</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Resources -->
+        <div class="tips-section">
+            <h2>📚 Additional Resources</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                <ul style="list-style-position: inside; line-height: 1.8; color: #333;">
+                    <li><strong>CISA (Cybersecurity and Infrastructure Security Agency):</strong> www.cisa.gov</li>
+                    <li><strong>FBI - Internet Crime Complaint Center:</strong> www.ic3.gov</li>
+                    <li><strong>Federal Trade Commission:</strong> www.ftc.gov/scams</li>
+                    <li><strong>Your Bank's Security Resources:</strong> Check your bank's official website</li>
+                    <li><strong>Antivirus Software Providers:</strong> Norton, McAfee, Bitdefender</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p><strong>Remember: When in doubt, don't scan!</strong></p>
+            <p>Stay vigilant and educate others about quishing attacks</p>
+            <p style="margin-top: 15px; opacity: 0.8;">Last Updated: February 2026 | Cybersecurity Awareness Initiative</p>
+        </footer>
+    </div>
+</body>
+</html>
